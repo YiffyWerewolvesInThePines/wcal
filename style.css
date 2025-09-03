@@ -19,7 +19,39 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
+
+#monthTotal {
+  position: absolute;
+  right: 0;
+  bottom: -1.5rem;
+  font-size: 1rem;
+  color: gray;
+  font-style: italic;
+}
+
+.popup-content {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border: 3px solid #ccc; /* will be randomized in JS */
+}
+
+#popupClose {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 1.3rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
 
 header button {
   font-size: 1.5rem;
