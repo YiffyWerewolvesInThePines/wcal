@@ -21,6 +21,19 @@ header {
   align-items: center;
 }
 
+header button {
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+header button:hover {
+  background: #ddd;
+}
+
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -32,7 +45,7 @@ header {
   min-height: 100px;
   padding: 6px;
   text-align: left;
-  background: #eee; /* default weekdays */
+  background: #eee; /* weekdays default */
   position: relative;
 }
 
@@ -52,19 +65,6 @@ header {
 .today {
   border: 2px solid red;
   border-radius: 8px;
-}
-
-header button {
-  font-size: 1.5rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background: #f0f0f0;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-header button:hover {
-  background: #ddd;
 }
 
 .footer-info {
