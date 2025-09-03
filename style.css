@@ -99,4 +99,47 @@ header button:hover {
 
 .month-total {
   margin-top: 1rem;
-  font-si
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: gray;
+  text-align: right;
+}
+
+/* popup modal */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-content {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border: 3px solid #ccc; /* randomized in JS */
+}
+
+#popupClose {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 1.3rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
