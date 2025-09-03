@@ -117,36 +117,39 @@ function renderCalendar(year, month) {
       dayElem.classList.add("today");
     }
 
-    // work log for this day
-    const log = workData.find(r => r.date === dateStr);
-    if (log) {
-      const intensity = Math.min(1, log.hours / 10);
+    // work log(s) for this day
+    const logs = workData.filter(r => r.date === dateStr);
+
+    // confirmed(s) for this day
+    const confirmed = confirmedData.filter(c => c.date === dateStr);
+
+    // color for work logs
+    if (logs.length > 0) {
+      const totalHours = logs.reduce((sum, r) => sum + r.hours, 0);
+      const intensity = Math.min(1, totalHours / 10);
       const green = 255 - Math.floor(intensity * 155);
       dayElem.style.backgroundColor = `rgb(${green},255,${green})`;
 
-      if (log.time || log.comment) {
-        const tooltip = document.createElement("div");
-        tooltip.className = "tooltip";
-        tooltip.textContent = `${log.hours}h ${log.time}\n${log.comment}`;
-        dayElem.appendChild(tooltip);
-      }
-
-      dayElem.addEventListener("click", () => openPopup(dateStr, log.hours, log.time, log.comment, []));
+      // tooltip (combine first log + comment)
+      const tooltip = document.createElement("div");
+      tooltip.className = "tooltip";
+      tooltip.textContent = logs.map(r => `${r.hours}h ${r.time}\n${r.comment}`).join("\n\n");
+      dayElem.appendChild(tooltip);
     }
 
-    // confirmed for this day
-    const confirmed = confirmedData.filter(c => c.date === dateStr);
+    // marker for confirmed
     if (confirmed.length > 0) {
       dayElem.classList.add("confirmed");
       const fox = document.createElement("div");
       fox.className = "fox";
       fox.textContent = "🦊";
       dayElem.appendChild(fox);
+    }
 
-      const totalConfirmed = confirmed.reduce((sum, c) => sum + c.hours, 0);
-
+    // click popup (work + confirmed combined)
+    if (logs.length > 0 || confirmed.length > 0) {
       dayElem.addEventListener("click", () => {
-        openPopup(dateStr, null, null, null, confirmed);
+        openPopup(dateStr, logs, confirmed);
       });
     }
 
@@ -184,18 +187,30 @@ function renderCalendar(year, month) {
   }
 }
 
-function openPopup(dateStr, hours, time, comment, confirmed) {
+function openPopup(dateStr, logs, confirmed) {
   const popup = document.getElementById("popup");
   const popupBody = document.getElementById("popupBody");
   if (!popup || !popupBody) return;
 
   let content = `<b>${dateStr}</b><br>`;
-  if (hours !== null) content += `${hours} hours<br>`;
-  if (time) content += `${time}<br>`;
-  if (comment) content += `${comment}<br>`;
+
+  if (logs.length > 0) {
+    content += `<u>Work log:</u><br>`;
+    logs.forEach(r => {
+      content += `${r.hours} hours<br>`;
+      if (r.time) content += `${r.time}<br>`;
+      if (r.comment) content += `${r.comment}<br>`;
+      content += `<br>`;
+    });
+  }
+
+  if (logs.length > 0 && confirmed.length > 0) {
+    content += `<hr>`;
+  }
+
   if (confirmed.length > 0) {
     const totalConfirmed = confirmed.reduce((sum, c) => sum + c.hours, 0);
-    content += `<br>🦊 Confirmed: ${totalConfirmed}h`;
+    content += `<u>🦊 Confirmed:</u><br>${totalConfirmed} hours`;
   }
 
   popupBody.innerHTML = content;
