@@ -18,7 +18,6 @@ function parseCSV(text) {
   const rows = text.trim().split("\n");
   rows.shift(); // remove header
   return rows.map(line => {
-    // split CSV safely
     const parts = line.match(/("[^"]*"|[^,])+/g) || [];
     return {
       date: normalizeDate(parts[0]),
@@ -75,48 +74,99 @@ function renderCalendar(year, month) {
   const daysInMonth = lastDay.getDate();
   const offset = (startDay + 6) % 7; // Monday first
 
-  for (let i=0; i<offset; i++) {
+  // blank leading cells
+  for (let i = 0; i < offset; i++) {
     const blank = document.createElement("div");
     blank.className = "day blank";
     calendar.appendChild(blank);
-  // inside renderCalendar, for each day with log:
-if (log) {
-  // color intensity
-  const intensity = Math.min(1, log.hours / 10);
-  const green = 255 - Math.floor(intensity * 155);
-  dayElem.style.backgroundColor = `rgb(${green},255,${green})`;
-
-  // tooltip (only if data exists)
-  if (log.time || log.comment) {
-    const tooltip = document.createElement("div");
-    tooltip.className = "tooltip";
-    tooltip.textContent = `${log.hours}h ${log.time}\n${log.comment}`;
-    dayElem.appendChild(tooltip);
   }
 
-  // click popup (guarded)
-  dayElem.addEventListener("click", () => {
-    const popup = document.getElementById("popup");
-    const popupBody = document.getElementById("popupBody");
-    if (!popup || !popupBody) {
-      console.warn("Popup elements missing");
-      return;
+  // actual days
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${pad(month + 1)}-${pad(d)}`;
+    const cellDate = new Date(year, month, d);
+    const weekday = cellDate.getDay();
+
+    const dayElem = document.createElement("div");
+    dayElem.className = "day";
+    if (weekday === 6) dayElem.classList.add("saturday");
+    if (weekday === 0) dayElem.classList.add("sunday");
+
+    const number = document.createElement("div");
+    number.className = "day-number";
+    number.textContent = d;
+    dayElem.appendChild(number);
+
+    // highlight today
+    const today = new Date();
+    if (
+      year === today.getFullYear() &&
+      month === today.getMonth() &&
+      d === today.getDate()
+    ) {
+      dayElem.classList.add("today");
     }
-    popupBody.innerHTML =
-      `<b>${dateStr}</b><br>${log.hours} hours<br>${log.time}<br>${log.comment}`;
-    popup.classList.remove("hidden");
-  });
+
+    // find work log for this day
+    const log = workData.find(r => r.date === dateStr);
+    if (log) {
+      // color intensity (1–10h)
+      const intensity = Math.min(1, log.hours / 10);
+      const green = 255 - Math.floor(intensity * 155);
+      dayElem.style.backgroundColor = `rgb(${green},255,${green})`;
+
+      // tooltip
+      if (log.time || log.comment) {
+        const tooltip = document.createElement("div");
+        tooltip.className = "tooltip";
+        tooltip.textContent = `${log.hours}h ${log.time}\n${log.comment}`;
+        dayElem.appendChild(tooltip);
+      }
+
+      // click popup
+      dayElem.addEventListener("click", () => {
+        const popup = document.getElementById("popup");
+        const popupBody = document.getElementById("popupBody");
+        if (!popup || !popupBody) {
+          console.warn("Popup elements missing");
+          return;
+        }
+        popupBody.innerHTML =
+          `<b>${dateStr}</b><br>${log.hours} hours<br>${log.time}<br>${log.comment}`;
+        popup.classList.remove("hidden");
+      });
+    }
+
+    calendar.appendChild(dayElem);
+  }
 }
 
+// navigation
+document.getElementById("prevMonth").addEventListener("click", () => {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
   }
-  
+  renderCalendar(currentYear, currentMonth);
+});
 
-  for (let d=1; d<=daysInMonth; d++) {
-    const dateStr = `${year}-$
-// close button (guarded)
+document.getElementById("nextMonth").addEventListener("click", () => {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  renderCalendar(currentYear, currentMonth);
+});
+
+// close popup
 const popupClose = document.getElementById("popupClose");
 if (popupClose) {
   popupClose.addEventListener("click", () => {
     document.getElementById("popup").classList.add("hidden");
   });
 }
+
+// initial load
+loadCSV();
