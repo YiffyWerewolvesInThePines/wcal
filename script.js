@@ -137,16 +137,25 @@ document.getElementById("monthTotal").textContent =
 
       // click popup
       dayElem.addEventListener("click", () => {
-        const popup = document.getElementById("popup");
-        const popupBody = document.getElementById("popupBody");
-        if (!popup || !popupBody) {
-          console.warn("Popup elements missing");
-          return;
-        }
-        popupBody.innerHTML =
-          `<b>${dateStr}</b><br>${log.hours} hours<br>${log.time}<br>${log.comment}`;
-        popup.classList.remove("hidden");
-      });
+  const popup = document.getElementById("popup");
+  const popupBody = document.getElementById("popupBody");
+  if (!popup || !popupBody) {
+    console.warn("Popup elements missing");
+    return;
+  }
+
+  popupBody.innerHTML =
+    `<b>${dateStr}</b><br>${log.hours} hours<br>${log.time}<br>${log.comment}`;
+
+  // random pastel border
+  const colors = ["#ffb6c1", "#add8e6", "#90ee90", "#ffd700", "#dda0dd"];
+  const randColor = colors[Math.floor(Math.random() * colors.length)];
+  document.querySelector(".popup-content").style.borderColor = randColor;
+
+  popup.classList.remove("hidden");
+});
+
+      
     }
 
     calendar.appendChild(dayElem);
