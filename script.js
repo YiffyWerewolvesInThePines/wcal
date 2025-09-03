@@ -113,3 +113,10 @@ if (log) {
 
   for (let d=1; d<=daysInMonth; d++) {
     const dateStr = `${year}-$
+// close button (guarded)
+const popupClose = document.getElementById("popupClose");
+if (popupClose) {
+  popupClose.addEventListener("click", () => {
+    document.getElementById("popup").classList.add("hidden");
+  });
+}
