@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Simple Calendar</title>
+  <title>Work Log Calendar</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,8 +13,17 @@
       <button id="nextMonth">→</button>
     </header>
     <div class="calendar" id="calendar"></div>
-    <!-- footer info will be added dynamically -->
+    <div class="footer-info" id="footer"></div>
   </div>
+
+  <!-- modal popup -->
+  <div id="popup" class="popup hidden">
+    <div class="popup-content">
+      <button id="popupClose">×</button>
+      <div id="popupBody"></div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
