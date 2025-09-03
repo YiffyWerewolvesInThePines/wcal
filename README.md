@@ -29,6 +29,7 @@ Just edit CSV files, push to GitHub Pages, and view your calendar online.
 
 ### 1. work_log.csv (your actuals)  
 
+
 date,hours,time,comment
 2025-09-01,1,10:00-11:00,"Morning jog"
 2025-09-02,2,19:00-21:00,"Gym 🏋️"
@@ -41,6 +42,7 @@ date,hours,time,comment
 - **comment** → optional notes  
 
 ### 2. confirmed.csv (your goals)  
+
 
 date,hours
 2025-09-01,10
