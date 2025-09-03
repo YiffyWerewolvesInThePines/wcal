@@ -115,18 +115,6 @@ function renderCalendar(year, month) {
       const green = 255 - Math.floor(intensity * 155);
       dayElem.style.backgroundColor = `rgb(${green},255,${green})`;
 
-      // calculate monthly total
-    const totalHours = workData
-      .filter(r => {
-        const d = new Date(r.date);
-        return d.getFullYear() === year && d.getMonth() === month;
-      })
-      .reduce((sum, r) => sum + (r.hours || 0), 0);
-
-document.getElementById("monthTotal").textContent = 
-  `Total: ${totalHours}h`;
-
-
       // tooltip
       if (log.time || log.comment) {
         const tooltip = document.createElement("div");
@@ -137,28 +125,38 @@ document.getElementById("monthTotal").textContent =
 
       // click popup
       dayElem.addEventListener("click", () => {
-  const popup = document.getElementById("popup");
-  const popupBody = document.getElementById("popupBody");
-  if (!popup || !popupBody) {
-    console.warn("Popup elements missing");
-    return;
-  }
+        const popup = document.getElementById("popup");
+        const popupBody = document.getElementById("popupBody");
+        if (!popup || !popupBody) return;
 
-  popupBody.innerHTML =
-    `<b>${dateStr}</b><br>${log.hours} hours<br>${log.time}<br>${log.comment}`;
+        popupBody.innerHTML =
+          `<b>${dateStr}</b><br>${log.hours} hours<br>${log.time}<br>${log.comment}`;
 
-  // random pastel border
-  const colors = ["#ffb6c1", "#add8e6", "#90ee90", "#ffd700", "#dda0dd"];
-  const randColor = colors[Math.floor(Math.random() * colors.length)];
-  document.querySelector(".popup-content").style.borderColor = randColor;
+        // random pastel border
+        const colors = ["#ffb6c1", "#add8e6", "#90ee90", "#ffd700", "#dda0dd"];
+        const randColor = colors[Math.floor(Math.random() * colors.length)];
+        document.querySelector(".popup-content").style.borderColor = randColor;
 
-  popup.classList.remove("hidden");
-});
-
-      
+        popup.classList.remove("hidden");
+      });
     }
 
     calendar.appendChild(dayElem);
+  }
+
+  // calculate and show monthly total
+  const totalHours = workData
+    .filter(r => {
+      const d = new Date(r.date);
+      return d.getFullYear() === year && d.getMonth() === month;
+    })
+    .reduce((sum, r) => sum + (r.hours || 0), 0);
+
+  const monthTotalElem = document.getElementById("monthTotal");
+  if (totalHours > 0) {
+    monthTotalElem.textContent = `Total this month: ${totalHours}h`;
+  } else {
+    monthTotalElem.textContent = `No hours recorded this month`;
   }
 }
 
