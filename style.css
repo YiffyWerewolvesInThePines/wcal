@@ -44,17 +44,17 @@ header button:hover {
   border: 1px solid #ddd;
   min-height: 100px;
   padding: 6px;
-  text-align: left;
-  background: #eee; /* weekdays default */
+  background: #eee;
   position: relative;
+  cursor: pointer;
 }
 
 .day.saturday {
-  background: #ffe6e6; /* pale pink */
+  background: #ffe6e6;
 }
 
 .day.sunday {
-  background: #ffcccc; /* brighter pink */
+  background: #ffcccc;
 }
 
 .day-number {
@@ -67,9 +67,61 @@ header button:hover {
   border-radius: 8px;
 }
 
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: black;
+  color: white;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: pre-line;
+  transition: opacity 0.2s;
+  z-index: 5;
+}
+
+.day:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
 .footer-info {
   margin-top: 0.5rem;
   font-size: 0.8rem;
   color: gray;
   text-align: left;
 }
+
+/* popup modal */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-content {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#popupClo
