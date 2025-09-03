@@ -115,6 +115,18 @@ function renderCalendar(year, month) {
       const green = 255 - Math.floor(intensity * 155);
       dayElem.style.backgroundColor = `rgb(${green},255,${green})`;
 
+      // calculate monthly total
+    const totalHours = workData
+      .filter(r => {
+        const d = new Date(r.date);
+        return d.getFullYear() === year && d.getMonth() === month;
+      })
+      .reduce((sum, r) => sum + (r.hours || 0), 0);
+
+document.getElementById("monthTotal").textContent = 
+  `Total: ${totalHours}h`;
+
+
       // tooltip
       if (log.time || log.comment) {
         const tooltip = document.createElement("div");
