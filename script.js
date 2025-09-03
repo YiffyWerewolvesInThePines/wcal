@@ -79,7 +79,37 @@ function renderCalendar(year, month) {
     const blank = document.createElement("div");
     blank.className = "day blank";
     calendar.appendChild(blank);
+  // inside renderCalendar, for each day with log:
+if (log) {
+  // color intensity
+  const intensity = Math.min(1, log.hours / 10);
+  const green = 255 - Math.floor(intensity * 155);
+  dayElem.style.backgroundColor = `rgb(${green},255,${green})`;
+
+  // tooltip (only if data exists)
+  if (log.time || log.comment) {
+    const tooltip = document.createElement("div");
+    tooltip.className = "tooltip";
+    tooltip.textContent = `${log.hours}h ${log.time}\n${log.comment}`;
+    dayElem.appendChild(tooltip);
   }
+
+  // click popup (guarded)
+  dayElem.addEventListener("click", () => {
+    const popup = document.getElementById("popup");
+    const popupBody = document.getElementById("popupBody");
+    if (!popup || !popupBody) {
+      console.warn("Popup elements missing");
+      return;
+    }
+    popupBody.innerHTML =
+      `<b>${dateStr}</b><br>${log.hours} hours<br>${log.time}<br>${log.comment}`;
+    popup.classList.remove("hidden");
+  });
+}
+
+  }
+  
 
   for (let d=1; d<=daysInMonth; d++) {
     const dateStr = `${year}-$
