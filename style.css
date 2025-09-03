@@ -53,3 +53,23 @@ header {
   border: 2px solid red;
   border-radius: 8px;
 }
+
+header button {
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+header button:hover {
+  background: #ddd;
+}
+
+.footer-info {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: gray;
+  text-align: left;
+}
